@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    
+    <!-- <script src="script_2.js"></script> -->
+    <script>
+       function startDictation() {
+
+    if (window.hasOwnProperty('webkitSpeechRecognition')) {
+
+      var recognition = new webkitSpeechRecognition();
+
+      recognition.continuous = true;
+      recognition.interimResults = true;
+
+      recognition.lang = "en-US";
+      recognition.start();
+      recognition.onresult = function(e) {
+      var current = e.resultIndex;
+       document.getElementById('transcript').value += e.results[current][0].transcript;
+        recognition.start();                                 
+      
+      };
+
+
+      }
+    }
+    </script>
+
+
+  </head>
+  <body>
+    <h4>Web application supported on Flask</h4>
+    <h1>Amigo</h1>
+    <h3>A Chatbot Companion</h3>
+    <div>
+      <div id="chatbox">
+        <p class="botText"><span>hi! i'm amigo, your companion bot.</span></p>
+      </div>
+      <div id="userInput">
+        
+        <!--<input id="submitButton" type="submit" value="Send"> -->
+        <input id="speakButton" type="image" src='https://cdn.pixabay.com/photo/2018/05/15/20/47/microphone-3404243_960_720.png' width="40" height="40" style="padding-left: 50px; padding-right: 18px" />
+        
+        <input type="text" name="q" id="transcript" style="font-weight: 550; font-family: monospace; padding-top: 8px; padding-bottom: 8px;font-size: 12pt" />
+        
+        <input id="submitButton" type="image" src='https://www.iconbunny.com/icons/media/catalog/product/cache/2/thumbnail/600x/1b89f2fc96fc819c2a7e15c7e545e8a9/6/0/602.9-send-message-icon-iconbunny.jpg' width="40" height="40" style="padding-left: 15px; padding-right: 10px" />
+      </div>
+      <script> 
+
+        function getBotResponse() {
+          //var rawText = $("#textInput").val();
+          //var rawText = transcript
+          var rawText = $("#transcript").val();
+          var userHtml = '<p class="userText"><span>' + rawText + '</span></p>';
+          $("#transcript").val("");
+          $("#chatbox").append(userHtml);
+          document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+          $.get("/get", { msg: rawText }).done(function(data) {
+            var botHtml = '<p class="botText"><span>' + data + '</span></p>';
+            $("#chatbox").append(botHtml);
+            document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+          });
+        }
+        $("#transcript").keypress(function(e) {
+            if(e.which == 13) {
+                getBotResponse();
+            }
+        });
+
+        $("#submitButton").click(function() {
+
+          getBotResponse();
+
+        })
+
+        $("#speakButton").click(function() {
+          //call speech recog fn
+          //return transcript
+          $.get("/startrec").done(function(data) {
+            if(data=='true')
+            {
+              $("#chatbox").append('<p class="botText"><span>' + 'i\'m listening now' + '</span></p>');
+              document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+            }
+          });
+          
+          $.get("/recog").done(function(data) {
+            
+            if(data == '00')
+            {
+              $("#chatbox").append('<p class="botText"><span>' + 'sorry, i did not catch that. please try again.' + '</span></p>');
+              document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+
+            }
+            else
+              {document.getElementById('transcript').value = data; getBotResponse();}
+          });
+          
+
+          
+        })
+
+      </script>
+      
+    </div>
+
+  </body>
+</html>

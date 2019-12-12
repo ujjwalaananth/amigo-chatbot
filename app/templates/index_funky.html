@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <h4>Web application supported on Flask</h4>
+    <h1>Amigo</h1>
+    <h3>A Chatbot to Assist the Elderly</h3>
+    <div>
+      <div id="chatbox">
+        <p class="botText"><span>Hi! I'm Amigo.</span></p>
+      </div>
+      <div id="userInput">
+
+        <!-- MICROPHONE -->
+        <audio id="player" controls></audio>
+        <script>
+          const player = document.getElementById('player');
+
+          const handleSuccess = function(stream) {
+            if (window.URL) {
+              player.srcObject = stream;
+            } else {
+              player.src = stream;
+            }
+          };
+
+          navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+              .then(handleSuccess);
+
+          const mediaRecorder = new MediaRecorder(stream, options);
+          mediaRecorder.addEventListener('dataavailable', function(e) {
+            if (e.data.size > 0) {
+              recordedChunks.push(e.data);
+            }
+
+            if(shouldStop === true && stopped === false) {
+              mediaRecorder.stop();
+              stopped = true;
+            }
+          });
+
+          mediaRecorder.addEventListener('stop', function() {
+            downloadLink.href = URL.createObjectURL(new Blob(recordedChunks));
+            downloadLink.download = 'acetest.wav';
+          });
+
+          mediaRecorder.start();
+        </script>
+        <!-- <input id="textInput" type="text" name="msg" placeholder="Message"> -->
+
+
+
+
+        <input id="buttonInput" type="submit" value="Send"> 
+      
+      </div>
+      <script>
+        function getBotResponse() {
+          var rawText = $("#textInput").val();
+          var userHtml = '<p class="userText"><span>' + rawText + '</span></p>';
+          $("#textInput").val("");
+          $("#chatbox").append(userHtml);
+          document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+          $.get("/get", { msg: rawText }).done(function(data) {
+            var botHtml = '<p class="botText"><span>' + data + '</span></p>';
+            $("#chatbox").append(botHtml);
+            document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+          });
+        }
+        $("#textInput").keypress(function(e) {
+            if(e.which == 13) {
+                getBotResponse();
+            }
+        });
+        $("#buttonInput").click(function() {
+          getBotResponse();
+        })
+      </script>
+    </div>
+
+  </body>
+</html>
