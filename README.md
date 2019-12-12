@@ -1,7 +1,6 @@
 # amigo-chatbot
 Chatbot Web App using Context Identification and Sequence-to-Sequence Models
 
-
 ## Requirements
 !pip install keras==2.3.1 
 !pip install tensorflow==2.0.0 
@@ -43,4 +42,5 @@ The output of the chatbot model is a string, which is then voiced using the gTTS
 - W. Wang, S. Hosseini, A. H. Awadallah, P. N, Bennett, C. Quirk, “Context-Aware Intent Identification in Email Conversations,” Proc. 42Nd International ACM SIGIR Conference on Research and Development in Information Retrieval (SIGIR) 2019}, Paris, France, pp. 585--594, doi: 10.1145/3331184.3331260. 
 - I. Sutskever, O. Vinyals, Q. Le, “Sequence to Sequence Learning with Neural Networks,” Proc 27th International Conference on Neural Information Processing Systems (NIPS) 2014, Montreal, Canada, pp. 3104-3112. [Online]. Available: http://dl.acm.org/citation.cfm?id=2969033.2969173. 
 
-
+### How to run chatbot:
+Clone repo. Trained models and vocabularies for given data are stored in the models + arrays directory, extract and save in the directory containing app.py
