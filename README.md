@@ -2,12 +2,12 @@
 Chatbot Web App using Context Identification and Sequence-to-Sequence Models
 
 ## Requirements
-!pip install keras==2.3.1 
-!pip install tensorflow==2.0.0 
-!pip install keras_layer_normalization 
-!pip install gTTS 
-!pip install SpeechRecognition 
-!pip install pyaudio 
+- Keras 2.3.1 
+- Tensorflow 2.0.0 
+- keras_layer_normalization 
+- gTTS (Google Text-to-Speech)
+- SpeechRecognition (Google Speech Recognition API)
+- pyaudio 
 
 ### Methodology
 There are three main steps in the pipeline:
