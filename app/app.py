@@ -36,7 +36,7 @@ from keras import utils
 vect = joblib.load('vectorizer.pkl')
 category_clf = joblib.load('category_clf.pkl')
 lastText = ' '
-print('this part worked',lastText)    
+
 enc_gen = load_model('enc_generic1.h5',custom_objects={'LayerNormalization': LayerNormalization()})
 dec_gen = load_model('dec_generic1.h5',custom_objects={'LayerNormalization': LayerNormalization()})
 wi_gen = pickle.load(open("wi_gen.pkl","rb"))
